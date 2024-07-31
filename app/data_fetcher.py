@@ -1,8 +1,6 @@
 from newsapi import NewsApiClient
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 
 newsapi = NewsApiClient(NEWS_API_KEY)
@@ -38,7 +36,7 @@ def fetch_data():
     raw_data["general_news"] = fetch_general_news()
     raw_data["personal_news"] = {}
     for q in queries_of_interest:
-        raw_data["personal_news"][q] = fetch_news(query=q)
+        raw_data["personal_news"][q] = fetch_news(query=q, page_size=2)
         
     return raw_data
     
