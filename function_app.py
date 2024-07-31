@@ -4,7 +4,7 @@ from app.main import main
 
 app = func.FunctionApp()
 
-@app.schedule(schedule="0 0 5 * * *", arg_name="myTimer", run_on_startup=True,
+@app.schedule(schedule="0 0 5 * * *", arg_name="myTimer",
               use_monitor=False) 
 def timer_trigger(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
