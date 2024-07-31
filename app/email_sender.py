@@ -3,8 +3,6 @@ from azure.communication.email import EmailClient
 from azure.core.credentials import AzureKeyCredential
 import os
 
-# Load environment variables from .env file
-# Load ACS connection string from environment variable
 ACS_ENDPOINT = os.getenv('ACS_ENDPOINT')
 ACS_API_KEY = os.getenv('ACS_API_KEY')
 SENDER_ADDRESS = os.getenv('SENDER_ADDRESS')
@@ -42,7 +40,6 @@ def send_email(to_addresses, subject, body_text, body_html=None):
         return False
 
 if __name__ == '__main__':
-    # Example usage
     to_addresses = ['crsherman98@gmail.com']
     subject = 'Test Email'
     body_text = 'This is a test email sent from Azure Functions using Azure Communication Services.'

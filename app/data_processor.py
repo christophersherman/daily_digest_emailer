@@ -74,7 +74,6 @@ if __name__ == '__main__':
                     'publishedAt': '2024-07-30T02:28:00Z',
                     'content': 'CARACAS, Venezuela (AP) As thousands of people demonstrated across Venezuela, opposition candidate Edmundo González on Monday announced that his campaign has the proof it needs to show he won the cou… [+10597 chars]'
                 },
-                # Add other articles here...
             ]
         },
         'personal_news': {
@@ -92,7 +91,6 @@ if __name__ == '__main__':
                         'publishedAt': '2024-07-29T18:07:13.5494864Z',
                         'content': 'Similarly, several Russian military bloggers reported that at least 20 were killed in the ambush near the north-eastern town of Tinzaouaten.\r\nIn an official statement posted to Telegram, the Russian … [+2039 chars]'
                     },
-                    # Add other articles here...
                 ]
             },
             'israel': {
@@ -109,10 +107,8 @@ if __name__ == '__main__':
                         'publishedAt': '2024-07-29T23:52:13.2047765Z',
                         'content': 'Some soldiers at the base reportedly used pepper spray against the military police personnel who arrived to detain the reservists. \r\nDemonstrators also entered the Beit Lid military base in central I… [+1034 chars]'
                     },
-                    # Add other articles here...
                 ]
             },
-            # Add other sections here...
         }
     }
 
