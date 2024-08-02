@@ -6,9 +6,13 @@ I like to read my emails while drinking coffee in the morning. I have to play ca
 make my life easier 
 
 Provides generic news of the day : 
-![general_news](docs/general.png)
+![general_news](docs/general_news.png)
 
 Combined with a specific customizable group of topics of interest
 
-![personalized_news](docs/specific.png)
+![personalised_news](docs/personalised_news.png)
 
+
+Also has custom weather forecasts for the day 
+
+![weather_forecast](docs/weather_forecast.png)

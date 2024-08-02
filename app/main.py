@@ -2,15 +2,19 @@ import logging
 from .email_sender import send_email
 from .data_fetcher import fetch_data
 from .data_processor import generate_email_content
-import os 
+import os
 
 EMAIL_RECIPIENT = os.getenv('EMAIL_RECIPIENT')
+
 def main() -> None:
     logging.info('Starting the main function')
-    logging.info('Fetching data of interest') 
+    logging.info('Fetching data of interest')
+
+    # hardcoded for now  
+    cities = ['Sydney', 'Houston']
     
     # Fetch the raw data
-    raw_data = fetch_data()
+    raw_data = fetch_data(cities)
     
     # Process the raw data to create the HTML content
     email_html_content = generate_email_content(raw_data)

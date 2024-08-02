@@ -1,3 +1,45 @@
+import json
+from datetime import datetime
+
+def kelvin_to_celsius(kelvin):
+    return kelvin - 273.15
+
+def process_weather_data(city, weather_data):
+    forecast_list = weather_data['list'][:3]  # Get only the first 3 forecasts for brevity
+    weather_html = f'''
+    <div style="background-color: #f0f8ff; border-radius: 10px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
+        <h2 style="color: #2e6da4; text-align: center; margin-bottom: 20px;">Weather Forecast for {city}</h2>
+        <div style="display: flex; justify-content: space-around; align-items: center;">
+    '''
+
+    for forecast in forecast_list:
+        dt_txt = forecast['dt_txt']
+        date, time = dt_txt.split()
+        temp = kelvin_to_celsius(forecast['main']['temp'])
+        temp_min = kelvin_to_celsius(forecast['main']['temp_min'])
+        temp_max = kelvin_to_celsius(forecast['main']['temp_max'])
+        description = forecast['weather'][0]['description'].capitalize()
+        icon = forecast['weather'][0]['icon']
+        icon_url = f"http://openweathermap.org/img/wn/{icon}.png"
+
+        weather_html += f'''
+        <div style="text-align: center; padding: 10px; border-radius: 10px; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
+            <div style="font-weight: bold; font-size: 1.2em; margin-bottom: 10px;">{date}</div>
+            <div style="color: #555; font-size: 1em; margin-bottom: 10px;">{time}</div>
+            <img src="{icon_url}" alt="Weather Icon" style="width: 50px; height: 50px; margin-bottom: 10px;">
+            <div style="font-size: 1.5em; font-weight: bold; color: #333;">{temp:.1f}°C</div>
+            <div style="color: #555; font-size: 1em; margin-bottom: 10px;">{temp_min:.1f}°C / {temp_max:.1f}°C</div>
+            <div style="font-size: 1em; color: #2e6da4;">{description}</div>
+        </div>
+        '''
+    
+    weather_html += '''
+        </div>
+    </div>
+    '''
+    return weather_html
+
+
 def process_articles(section_name, articles):
     html_content = f'<h2 style="color: #2e6da4;">{section_name.replace("_", " ").title()}</h2>'
 
@@ -36,6 +78,14 @@ def generate_email_content(data):
             <h1 style="color: #2e6da4; text-align: center;">Daily Digest</h1>
     '''
     
+    # Process Weather Forecast
+    forecast_data = data.get('forecast')
+    if forecast_data:
+        for city, forecast_response in forecast_data.items():
+            if forecast_response.status_code == 200:
+                weather_data = forecast_response.json()
+                html_content += process_weather_data(city, weather_data)
+
     # Process General News
     general_news = data.get('general_news', {})
     if general_news.get('status') == 'ok':
@@ -57,60 +107,3 @@ def generate_email_content(data):
     </html>
     '''
     return html_content
-
-if __name__ == '__main__':
-    raw_data = {
-        'general_news': {
-            'status': 'ok',
-            'totalResults': 46,
-            'articles': [
-                {
-                    'source': {'id': 'associated-press', 'name': 'Associated Press'},
-                    'author': 'JOSHUA GOODMAN, REGINA GARCIA CANO',
-                    'title': 'Venezuelan opposition says it has proof its candidate defeated President Maduro in disputed election - The Associated Press',
-                    'description': 'As thousands of people demonstrate across Venezuela, opposition candidate Edmundo González has announced that his campaign has the proof it needs to show he won the country’s disputed election whose victory electoral authorities handed to President Nicolás Ma…',
-                    'url': 'https://apnews.com/article/venezuela-presidential-election-maduro-machado-edmundo-results-acee6c8cd3a8fc88086c2dd71963b759',
-                    'urlToImage': 'https://dims.apnews.com/dims4/default/ea733c3/2147483647/strip/true/crop/6229x3504+0+325/resize/1440x810!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F%5B1%2F03%2F%2C%20-71%2C%2060%2C%20-52%2C%20-128%2C%20-97%2C%20-126%2C%20-73%2C%20-30%2C%20-27%2C%20-86%2C%20-69%2C%20-26%2C%20-121%2C%20-72%2C%2056%2C%20-39%2C%2017%2C%20111%2C%20-85%2C%20-84%2C%20-60%2C%2084%2C%208%2C%20-11%2C%20-68%2C%20-64%2C%2024%5D%2F561f4d6070534385b616a744f98a31c4',
-                    'publishedAt': '2024-07-30T02:28:00Z',
-                    'content': 'CARACAS, Venezuela (AP) As thousands of people demonstrated across Venezuela, opposition candidate Edmundo González on Monday announced that his campaign has the proof it needs to show he won the cou… [+10597 chars]'
-                },
-            ]
-        },
-        'personal_news': {
-            'russia': {
-                'status': 'ok',
-                'totalResults': 2,
-                'articles': [
-                    {
-                        'source': {'id': 'bbc-news', 'name': 'BBC News'},
-                        'author': 'BBC News',
-                        'title': 'Mali rebels thwart Russian mercenaries in sandstorm ambush',
-                        'description': 'Mercenaries formerly of the Wagner group say they suffered "losses" at the hands of 1,000 rebels.',
-                        'url': 'https://www.bbc.co.uk/news/articles/c4ng5zkn7dro',
-                        'urlToImage': 'https://ichef.bbci.co.uk/news/1024/branded_news/0d32/live/8facd760-4dc5-11ef-aebc-6de4d31bf5cd.jpg',
-                        'publishedAt': '2024-07-29T18:07:13.5494864Z',
-                        'content': 'Similarly, several Russian military bloggers reported that at least 20 were killed in the ambush near the north-eastern town of Tinzaouaten.\r\nIn an official statement posted to Telegram, the Russian … [+2039 chars]'
-                    },
-                ]
-            },
-            'israel': {
-                'status': 'ok',
-                'totalResults': 4,
-                'articles': [
-                    {
-                        'source': {'id': 'bbc-news', 'name': 'BBC News'},
-                        'author': 'BBC News',
-                        'title': 'Israeli protesters enter Sde Teiman army base after soldiers held over Gaza detainee abuse',
-                        'description': 'The Sde Teiman base has been at the centre of reports of serious abuses against Palestinians from Gaza.',
-                        'url': 'https://www.bbc.co.uk/news/articles/c2q07kd3ld6o',
-                        'urlToImage': 'https://ichef.bbci.co.uk/news/1024/branded_news/ad96/live/80dc8de0-4dd7-11ef-8f0f-0577398c3339.jpg',
-                        'publishedAt': '2024-07-29T23:52:13.2047765Z',
-                        'content': 'Some soldiers at the base reportedly used pepper spray against the military police personnel who arrived to detain the reservists. \r\nDemonstrators also entered the Beit Lid military base in central I… [+1034 chars]'
-                    },
-                ]
-            },
-        }
-    }
-
-    email_content = generate_email_content(raw_data)
-    print(email_content)

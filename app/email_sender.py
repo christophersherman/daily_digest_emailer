@@ -2,7 +2,9 @@ import logging
 from azure.communication.email import EmailClient
 from azure.core.credentials import AzureKeyCredential
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 ACS_ENDPOINT = os.getenv('ACS_ENDPOINT')
 ACS_API_KEY = os.getenv('ACS_API_KEY')
 SENDER_ADDRESS = os.getenv('SENDER_ADDRESS')
