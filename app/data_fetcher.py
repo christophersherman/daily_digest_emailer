@@ -1,9 +1,7 @@
 from newsapi import NewsApiClient
 import os
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
 NEWS_API_KEY = os.getenv('NEWS_API_KEY')
 WEATHER_API_KEY = os.getenv('WEATHER_API_KEY')
 BASE_WEATHER_URL = 'http://api.openweathermap.org/data/2.5/forecast'
